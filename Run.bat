@@ -1,0 +1,2 @@
+python .\RayMarching.py
+pause
