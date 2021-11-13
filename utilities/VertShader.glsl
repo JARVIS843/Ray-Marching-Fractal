@@ -1,6 +1,7 @@
 #version 410
 
-out vec4 pos;
+attribute vec4 pos;
+
 
 void main()
 {

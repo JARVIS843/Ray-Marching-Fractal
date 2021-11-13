@@ -30,6 +30,7 @@ class Shader:
         glGetShaderiv(shader, GL_COMPILE_STATUS, byref(status))
 
         if not status.value:
+            self.print_log(shader)
             glDeleteShader(shader)	
             raise ValueError('Shader compilation failed')
 		
@@ -66,6 +67,15 @@ class Shader:
             glDeleteShader(fragment_shader)
 
         return program
+    
+    
+    def print_log(self,shader):
+        length = c_int()
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, byref(length))
+        
+        if length.value > 0:
+            log = create_string_buffer(length.value)
+            print(glGetShaderInfoLog(shader))
     	
 
 
