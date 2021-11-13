@@ -3,6 +3,9 @@ import pygame , sys , math
 from pygame.locals import *
 import numpy as np
 
+#import from local files
+
+
 #import OpenGL
 from OpenGL.GL import *
 from OpenGL.GLU import *
