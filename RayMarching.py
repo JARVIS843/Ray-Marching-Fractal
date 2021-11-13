@@ -18,13 +18,19 @@ clock = pygame.time.Clock()
 
 FPSLim = 300
 
-Velocity = 0.01
+v_lim = 4
+
+v = np.zeros((3,), dtype = np.float32)                       #Velocity
 
 SpeedUpFactor = 10
 
 InitPos = [0,0,10]              #Initial Position: away from Z axis
 
 Transform = np.identity(4)      #Initialize transform matrix with identity
+
+dt = 0.001              #Delta Time
+
+DPI_Multiplier = 1.6         #Factor of DPI
 
 #Temp Tests
 vertices= (
@@ -82,15 +88,20 @@ def RotateY(theta):
                 [0,1,0],
                 [-sine,0,cosine]], dtype = np.float32
                     )
+    return MatrixF
+    
+#Normalize a given vector
+def normalize(lst):
+    if(lst.__contains__(0)): return 0
+    else:
+        norm = [float(i)/max(lst) for i in lst]
+        return norm
 
 #Main execution
 if __name__ == "__main__":
 
-
-
-
     pygame.init()
-    
+    pygame.display.set_caption('3D Fractal Visualizer with Buffs')
     pygame.display.set_mode(Display_Size, DOUBLEBUF|OPENGL)
     pygame.mouse.set_visible(False)
     
@@ -130,8 +141,6 @@ if __name__ == "__main__":
     #Load Transfrom Matrix with initial position
     Transform[3 , :3] = InitPos
     
-    print(Transform)
-    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -144,6 +153,50 @@ if __name__ == "__main__":
             pygame.mouse.set_pos(displayCenter)    
 
         
+        
+        #Advanced Controls
+        Transform[3,:3] += v * dt
+        #WASD Controls
+        KeyPressed = pygame.key.get_pressed()
+        vec = np.zeros((3,), dtype=np.float32)
+        
+        
+        if pygame.key.get_focused():                                    #if Key is pressed
+            x = mouseMove[0] * DPI_Multiplier * dt
+            y = mouseMove[1] * DPI_Multiplier * dt
+
+            rx = RotateX(x)
+            ry = RotateY(y)
+            Transform[:3,:3] = np.dot(ry, np.dot(rx, Transform[:3,:3]))
+            
+            if KeyPressed[pygame.K_w]:
+                vec[2] -= 2/FPSLim
+            if KeyPressed[pygame.K_s]:
+                vec[2] += 2/FPSLim
+            if KeyPressed[pygame.K_a]:
+                vec[0] -= 2/FPSLim
+            if KeyPressed[pygame.K_d]:
+                vec[0] += 2/FPSLim
+            if KeyPressed[pygame.K_q]:
+                vec[1] += 2/FPSLim
+            if KeyPressed[pygame.K_e]:
+                vec[1] -= 2/FPSLim
+            if KeyPressed[pygame.K_SPACE]:
+                v *= SpeedUpFactor
+            
+            #Apply Calculations to Transform matrix
+            v += np.dot(Transform[:3,:3].T, vec)
+            v_ratio = min(v_lim , 1e20) / (np.linalg.norm(v) + 1e-12)
+            if v_ratio < 1.0 : 
+                v *= v_ratio
+                        
+        else:
+            #Stop Moving when keys are not pressed
+            v *= 0.5
+            
+       
+            
+
 
         
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
@@ -156,5 +209,5 @@ if __name__ == "__main__":
         
         clock.tick(FPSLim)                                      #Set Limit for FPS
         
-        #print(clock.get_fps())
+        print(clock.get_fps())
     
