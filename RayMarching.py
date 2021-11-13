@@ -4,7 +4,7 @@ from pygame.locals import *
 import numpy as np
 
 #import from local files
-
+from utilities.Shaders import Shader
 
 #import OpenGL
 from OpenGL.GL import *
