@@ -18,9 +18,9 @@ clock = pygame.time.Clock()
 
 FPSLim = 300
 
-Velocity = 0.01;
+Velocity = 0.01
 
-SpeedUpFactor = 10;
+SpeedUpFactor = 10
 
 InitPos = [0,0,10]              #Initial Position: away from Z axis
 
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     pygame.init()
     
     pygame.display.set_mode(Display_Size, DOUBLEBUF|OPENGL)
-    pygame.mouse.set_visible(False);
+    pygame.mouse.set_visible(False)
     
     #Setting up the scene
     #glMatrixMode(GL_PROJECTION)
@@ -115,14 +115,13 @@ if __name__ == "__main__":
     
     #Obtain storage locations of shader variables
     ResolutionLoc = glGetUniformLocation(program, "iResolution")
-
+    
 
 
     #Dispatch data to Fragment Shader through obtained locations
     glUniform2fv(ResolutionLoc, 1, Display_Size)
-
-
-
+    
+    
     #Enable Vertex Array and Pointer
     fullscreen_quad = np.array([-1.0, -1.0, 0.0, 1.0, -1.0, 0.0, -1.0, 1.0, 0.0, 1.0, 1.0, 0.0], dtype=np.float32)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, fullscreen_quad)

@@ -11,8 +11,8 @@ class Shader:
         vertex_dir = os.path.join(os.path.dirname(__file__),'VertShader.glsl')
         fragment_dir = os.path.join(os.path.dirname(__file__),'FragShader.glsl')
         #Read the shader and convert to string
-        vertshader = open(vertex_dir).read();
-        fragshader = open(fragment_dir).read();
+        vertshader = open(vertex_dir).read()
+        fragshader = open(fragment_dir).read()
 
         program = self.CompileProgram(vertshader,fragshader)
 
