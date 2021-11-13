@@ -1,1 +1,6 @@
-#version 460
+#version 410
+
+void main()
+{
+    gl_FragColor = vec4(1,1,1,1);
+}

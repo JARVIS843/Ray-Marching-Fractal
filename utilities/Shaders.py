@@ -5,11 +5,8 @@ from OpenGL.GLU import *
 import os
 
 class Shader:
-    def __init__(self, obj):
-        self.obj = obj
 
-
-    def DecodeShaders():
+    def DecodeShaders(self):
         #Obtain directory of vertex and fragment shader
         vertex_dir = os.path.join(os.path.dirname(__file__),'VertShader.glsl')
         fragment_dir = os.path.join(os.path.dirname(__file__),'FragShader.glsl')
@@ -17,13 +14,13 @@ class Shader:
         vertshader = open(vertex_dir).read();
         fragshader = open(fragment_dir).read();
 
-        program = CompileProgram(vertshader,fragshader)
+        program = self.CompileProgram(vertshader,fragshader)
 
         return program
 
     
 
-    def CompileShader(source,shader_type):
+    def CompileShader(self , source,shader_type):
         #Create and Compile shaders
         shader = glCreateShader(shader_type) 
         glShaderSource(shader, source)
@@ -33,7 +30,6 @@ class Shader:
         glGetShaderiv(shader, GL_COMPILE_STATUS, byref(status))
 
         if not status.value:
-            self.print_log(shader)	
             glDeleteShader(shader)	
             raise ValueError('Shader compilation failed')
 		
@@ -41,7 +37,7 @@ class Shader:
 
 
 
-    def CompileProgram(vertex_source,fragment_source):
+    def CompileProgram(self ,vertex_source,fragment_source):
         vertex_shader = None
         fragment_shader = None
         #Create program
@@ -50,17 +46,17 @@ class Shader:
         if vertex_source:		
             print("Compiling Vertex Shader...")	
             #Create and attach vertex shader to program	
-            vertex_shader = self.compile_shader(vertex_source, GL_VERTEX_SHADER)    
+            vertex_shader = self.CompileShader(vertex_source, GL_VERTEX_SHADER)    
             glAttachShader(program, vertex_shader)
 		
         if fragment_source:		
             print("Compiling Fragment Shader...")		
             #Create and attach fragment shader to program
-            fragment_shader = self.compile_shader(fragment_source, GL_FRAGMENT_SHADER)			
+            fragment_shader = self.CompileShader(fragment_source, GL_FRAGMENT_SHADER)			
             glAttachShader(program, fragment_shader)
 
         #Binding vertex attribute position to defaut location 0
-        glBindAttribLocation(program, 0, "vPosition")               #TODO add and link VertexArray and Pointer to location 0
+        glBindAttribLocation(program, 0, "pos")               #TODO add and link VertexArray and Pointer to location 0
 		
         #link and prepare program for use
         glLinkProgram(program)		
@@ -70,6 +66,7 @@ class Shader:
             glDeleteShader(fragment_shader)
 
         return program
+    	
 
 
 

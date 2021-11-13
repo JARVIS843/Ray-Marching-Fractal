@@ -67,6 +67,7 @@ if __name__ == "__main__":
     scree = pygame.display.set_mode(Display_Size, DOUBLEBUF|OPENGL)
     pygame.mouse.set_visible(False);
     
+    #Setting up the scene
     glMatrixMode(GL_PROJECTION)
     gluPerspective(110 , Display_Size[0]/Display_Size[1] , 0.01 , 50)
     glMatrixMode(GL_MODELVIEW)
@@ -80,7 +81,20 @@ if __name__ == "__main__":
     mouseMove = [0, 0]
     pygame.mouse.set_pos(displayCenter)
 
-    up_down_angle = 0.0
+
+    #Setting Up shaders
+    shader = Shader()
+    program = shader.DecodeShaders()
+    glUseProgram(program)
+
+
+
+    fullscreen_quad = np.array([-1, -1.0, 0.0, 1.0, -1.0, 0.0, -1.0, 1.0, 0.0, 1.0, 1.0, 0.0], dtype=np.float32)
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, fullscreen_quad)
+    glEnableVertexAttribArray(0)
+
+
+
     
     while True:
         for event in pygame.event.get():
@@ -143,11 +157,13 @@ if __name__ == "__main__":
         
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         
+        glDrawArrays(GL_TRIANGLE_STRIP,0,4)
         Cube()
+
         
-        pygame.display.flip();                                  #update frame
+        pygame.display.flip()                                 #update frame
         
         clock.tick(FPSLim)                                      #Set Limit for FPS
         
-        print(clock.get_fps())
+        #print(clock.get_fps())
     
