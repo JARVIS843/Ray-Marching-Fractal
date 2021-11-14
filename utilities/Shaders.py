@@ -13,8 +13,7 @@ class Shader:
         shade = {
         "Soft Shadow": 'SSShader.glsl',
         "Mandelbulb" : 'Mandelbulb.glsl',
-        "Sierpinski Tetrahedron" : 'ST.glsl',
-        "4D Julia Set" : 'julias.glsl'
+        "Sierpinski Tetrahedron" : 'ST.glsl'
                     }
         
         

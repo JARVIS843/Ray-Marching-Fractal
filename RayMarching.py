@@ -84,12 +84,11 @@ if __name__ == "__main__":
     #"Soft Shadow"
     #"Mandelbulb"
     #"Sierpinski Tetrahedron" 
-    #"4D Julia Set" 
 
 
 
     #Setting Up shaders
-    shader = Shader("Soft Shadow")
+    shader = Shader("Sierpinski Tetrahedron")
     program = shader.DecodeShaders()
     glUseProgram(program)
     
