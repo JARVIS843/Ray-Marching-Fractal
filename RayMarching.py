@@ -22,9 +22,9 @@ v_lim = 4
 
 v = np.zeros((3,), dtype = np.float32)                       #Velocity
 
-SpeedUpFactor = 10
+SpeedUpFactor = 20
 
-InitPos = [0,0,10]              #Initial Position: away from Z axis
+InitPos = [5.0 ,1.0, 5.0]              #Initial Position: away from Z axis
 
 Transform = np.identity(4)      #Initialize transform matrix with identity
 
@@ -126,6 +126,7 @@ if __name__ == "__main__":
     
     #Obtain storage locations of shader variables
     ResolutionLoc = glGetUniformLocation(program, "iResolution")
+    TransformLoc = glGetUniformLocation(program, "iMat")
     
 
 
@@ -162,17 +163,17 @@ if __name__ == "__main__":
         
         
         if pygame.key.get_focused():                                    #if Key is pressed
-            x = mouseMove[0] * DPI_Multiplier * dt
-            y = mouseMove[1] * DPI_Multiplier * dt
+            x = -mouseMove[0] * DPI_Multiplier * dt
+            y = -mouseMove[1] * DPI_Multiplier * dt
 
-            rx = RotateX(x)
-            ry = RotateY(y)
+            rx = RotateY(x)
+            ry = RotateX(y)
             Transform[:3,:3] = np.dot(ry, np.dot(rx, Transform[:3,:3]))
             
             if KeyPressed[pygame.K_w]:
-                vec[2] -= 2/FPSLim
-            if KeyPressed[pygame.K_s]:
                 vec[2] += 2/FPSLim
+            if KeyPressed[pygame.K_s]:
+                vec[2] -= 2/FPSLim
             if KeyPressed[pygame.K_a]:
                 vec[0] -= 2/FPSLim
             if KeyPressed[pygame.K_d]:
@@ -181,7 +182,7 @@ if __name__ == "__main__":
                 vec[1] += 2/FPSLim
             if KeyPressed[pygame.K_e]:
                 vec[1] -= 2/FPSLim
-            if KeyPressed[pygame.K_SPACE]:
+            if KeyPressed[pygame.K_LSHIFT]:
                 v *= SpeedUpFactor
             
             #Apply Calculations to Transform matrix
@@ -189,9 +190,8 @@ if __name__ == "__main__":
             v_ratio = min(v_lim , 1e20) / (np.linalg.norm(v) + 1e-12)
             if v_ratio < 1.0 : 
                 v *= v_ratio
-                        
-        else:
-            #Stop Moving when keys are not pressed
+        #If no input is detected               
+        if np.dot(vec,vec) == 0.0 :
             v *= 0.5
             
        
@@ -200,10 +200,8 @@ if __name__ == "__main__":
 
         
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        
+        glUniformMatrix4fv(TransformLoc,1 , False, Transform)
         glDrawArrays(GL_TRIANGLE_STRIP,0,4)
-        Cube()
-
         
         pygame.display.flip()                                 #update frame
         
