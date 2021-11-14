@@ -28,9 +28,11 @@ InitPos = [5.0 ,1.0, 5.0]              #Initial Position: away from Z axis
 
 Transform = np.identity(4)      #Initialize transform matrix with identity
 
-dt = 0.001              #Delta Time
+dt = 1/FPSLim              #Delta Time
 
-DPI_Multiplier = 1.6         #Factor of DPI
+DPI_Multiplier = 0.8         #Factor of DPI
+
+Speed = 20
 
 #Rotation in X axis, more info on https://stackabuse.com/understanding-opengl-through-python/
 def RotateX(theta):
@@ -76,8 +78,18 @@ if __name__ == "__main__":
     mouseMove = [0, 0]
     pygame.mouse.set_pos(displayCenter)
 
+
+
+
+    #"Soft Shadow"
+    #"Mandelbulb"
+    #"Sierpinski Tetrahedron" 
+    #"4D Julia Set" 
+
+
+
     #Setting Up shaders
-    shader = Shader()
+    shader = Shader("Soft Shadow")
     program = shader.DecodeShaders()
     glUseProgram(program)
     
@@ -128,17 +140,17 @@ if __name__ == "__main__":
             Transform[:3,:3] = np.dot(ry, np.dot(rx, Transform[:3,:3]))
             
             if KeyPressed[pygame.K_w]:
-                vec[2] += 2/FPSLim
+                vec[2] += Speed/FPSLim
             if KeyPressed[pygame.K_s]:
-                vec[2] -= 2/FPSLim
+                vec[2] -= Speed/FPSLim
             if KeyPressed[pygame.K_a]:
-                vec[0] -= 2/FPSLim
+                vec[0] -= Speed/FPSLim
             if KeyPressed[pygame.K_d]:
-                vec[0] += 2/FPSLim
+                vec[0] += Speed/FPSLim
             if KeyPressed[pygame.K_q]:
-                vec[1] += 2/FPSLim
+                vec[1] += Speed/FPSLim
             if KeyPressed[pygame.K_e]:
-                vec[1] -= 2/FPSLim
+                vec[1] -= Speed/FPSLim
             if KeyPressed[pygame.K_LSHIFT]:
                 v *= SpeedUpFactor
             

@@ -4,12 +4,24 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import os
 
-class Shader:
+class Shader:  
+    
+    def __init__(self, shader_used):
+        self.fragtype = shader_used
 
     def DecodeShaders(self):
+        shade = {
+        "Soft Shadow": 'SSShader.glsl',
+        "Mandelbulb" : 'Mandelbulb.glsl',
+        "Sierpinski Tetrahedron" : 'ST.glsl',
+        "4D Julia Set" : 'julias.glsl'
+                    }
+        
+        
+        
         #Obtain directory of vertex and fragment shader
         vertex_dir = os.path.join(os.path.dirname(__file__),'VertShader.glsl')
-        fragment_dir = os.path.join(os.path.dirname(__file__),'FragShader.glsl')
+        fragment_dir = os.path.join(os.path.dirname(__file__),shade[self.fragtype])
         #Read the shader and convert to string
         vertshader = open(vertex_dir).read()
         fragshader = open(fragment_dir).read()
