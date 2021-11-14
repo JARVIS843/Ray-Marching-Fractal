@@ -32,40 +32,6 @@ dt = 0.001              #Delta Time
 
 DPI_Multiplier = 1.6         #Factor of DPI
 
-#Temp Tests
-vertices= (
-    (1, -1, -1),
-    (1, 1, -1),
-    (-1, 1, -1),
-    (-1, -1, -1),
-    (1, -1, 1),
-    (1, 1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1)
-    )
-
-edges = (
-    (0,1),
-    (0,3),
-    (0,4),
-    (2,1),
-    (2,3),
-    (2,7),
-    (6,3),
-    (6,4),
-    (6,7),
-    (5,1),
-    (5,4),
-    (5,7)
-    )
-
-def Cube():
-    glBegin(GL_LINES)
-    for edge in edges:
-        for vertex in edge:
-            glVertex3fv(vertices[vertex])
-    glEnd()
-    
 #Rotation in X axis, more info on https://stackabuse.com/understanding-opengl-through-python/
 def RotateX(theta):
     cosine = math.cos(theta)
@@ -104,15 +70,6 @@ if __name__ == "__main__":
     pygame.display.set_caption('3D Fractal Visualizer with Buffs')
     pygame.display.set_mode(Display_Size, DOUBLEBUF|OPENGL)
     pygame.mouse.set_visible(False)
-    
-    #Setting up the scene
-    #glMatrixMode(GL_PROJECTION)
-    #gluPerspective(110 , Display_Size[0]/Display_Size[1] , 0.01 , 50)
-    #glMatrixMode(GL_MODELVIEW)
-    #gluLookAt(0, -8, 0, 0, 0, 0, 0, 0, 1)
-    #viewMatrix = glGetFloatv(GL_MODELVIEW_MATRIX)
-    #glLoadIdentity()
-    #glTranslatef(0,0,-10)
 
     # init mouse movement and center mouse on screen
     displayCenter = [Display_Size[0]/2 , Display_Size[1]/2]
@@ -194,10 +151,7 @@ if __name__ == "__main__":
         if np.dot(vec,vec) == 0.0 :
             v *= 0.5
             
-       
             
-
-
         
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         glUniformMatrix4fv(TransformLoc,1 , False, Transform)
