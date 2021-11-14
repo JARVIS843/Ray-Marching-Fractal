@@ -147,7 +147,6 @@ void main()
     vec3 ro = vec3(x,y,z);
     vec3 ta = vec3(x +1 , y , z + 1);
 
-
     vec3 tot = vec3(0.0);
 
     for( int m=0; m<AA; m++ )

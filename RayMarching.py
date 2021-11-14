@@ -12,7 +12,7 @@ from OpenGL.GLU import *
 
 
 #Fields & Data
-Display_Size = (1280,800)
+Display_Size = (1024,768)
 
 clock = pygame.time.Clock()
 
@@ -24,15 +24,15 @@ v = np.zeros((3,), dtype = np.float32)                       #Velocity
 
 SpeedUpFactor = 20
 
-InitPos = [5.0 ,1.0, 5.0]              #Initial Position: away from Z axis
+InitPos = [0.0,0.0,-5]              #Initial Position: away from Z axis
 
 Transform = np.identity(4)      #Initialize transform matrix with identity
 
 dt = 1/FPSLim              #Delta Time
 
-DPI_Multiplier = 0.8         #Factor of DPI
+DPI_Multiplier = 0.3         #Factor of DPI
 
-Speed = 20
+Speed = 1
 
 #Rotation in X axis, more info on https://stackabuse.com/understanding-opengl-through-python/
 def RotateX(theta):
@@ -148,9 +148,9 @@ if __name__ == "__main__":
             if KeyPressed[pygame.K_d]:
                 vec[0] += Speed/FPSLim
             if KeyPressed[pygame.K_q]:
-                vec[1] += Speed/FPSLim
-            if KeyPressed[pygame.K_e]:
                 vec[1] -= Speed/FPSLim
+            if KeyPressed[pygame.K_e]:
+                vec[1] += Speed/FPSLim
             if KeyPressed[pygame.K_LSHIFT]:
                 v *= SpeedUpFactor
             
