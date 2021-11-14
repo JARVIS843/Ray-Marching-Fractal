@@ -2,6 +2,7 @@
 
 //Define and Uniforms
 uniform vec2 iResolution;
+uniform mat4 iMat;
 #define AA 3
 
 
@@ -115,7 +116,7 @@ float calcAO( in vec3 pos, in vec3 nor )
     return clamp( 1.0 - 1.5*occ, 0.0, 1.0 );    
 }
 
-vec3 render( in vec3 ro, in vec3 rd, in int technique)
+vec3 render( in vec3 ro, in vec3 rd)
 { 
     vec3  col = vec3(0.0);
     float t = castRay(ro,rd);
@@ -132,7 +133,7 @@ vec3 render( in vec3 ro, in vec3 rd, in int technique)
         vec3  lig = normalize( vec3(-0.1, 0.3, 0.6) );
         vec3  hal = normalize( lig-rd );
         float dif = clamp( dot( nor, lig ), 0.0, 1.0 ) * 
-                    calcSoftshadow( pos, lig, 0.01, 3.0, technique );
+                    calcSoftshadow( pos, lig, 0.01, 3.0, 1 );
 
 		float spe = pow( clamp( dot( nor, hal ), 0.0, 1.0 ),16.0)*
                     dif *
@@ -162,17 +163,32 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
     return mat3( cu, cv, cw );
 }
 
+mat3 SliceMatrix(mat4 mat)
+{
+    vec3 a = vec3(mat[0][0],mat[0][1],mat[0][2]);
+    vec3 b = vec3(mat[1][0],mat[1][1],mat[1][2]);
+    vec3 c = vec3(mat[2][0],mat[2][1],mat[2][2]);
+
+    return mat3(a,b,c);
+}
+
 void main()
 {
+    mat3 AMatrix = SliceMatrix(iMat);
+
     // camera	
-    float an = 12.0 - sin(0.1);
-    vec3 ro = vec3( 3.0*cos(0.1*an), 1.0, -3.0*sin(0.1*an) );
-    vec3 ta = vec3( 0.0, -0.4, 0.0 );
+    float x = iMat[3][0];
+    float y = iMat[3][1];
+    float z = iMat[3][2];
+
+
+    vec3 ro = vec3(x,y,z);
+    vec3 ta = vec3(x +1 , y , z + 1);
+
+
+
     // camera-to-world transformation
-    mat3 ca = setCamera( ro, ta, 0.0 );
-
-    int technique = 1;
-
+    //mat3 ca = setCamera( ro, ta, 0.0 );
     vec3 tot = vec3(0.0);
 #if AA>1
     for( int m=0; m<AA; m++ )
@@ -186,10 +202,10 @@ void main()
 #endif
 
         // ray direction
-        vec3 rd = ca * normalize( vec3(p.xy,2.0) );
+        vec3 rd = AMatrix * normalize( vec3(p.xy,2.0) );
 
         // render	
-        vec3 col = render( ro, rd, technique);
+        vec3 col = render( ro, rd );
 
 		// gamma
         col = pow( col, vec3(0.4545) );
