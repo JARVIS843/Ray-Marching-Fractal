@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
 
     #Setting Up shaders
-    shader = Shader("Sierpinski Tetrahedron")
+    shader = Shader("Mandelbulb")
     program = shader.DecodeShaders()
     glUseProgram(program)
     
