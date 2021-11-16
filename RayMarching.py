@@ -12,7 +12,7 @@ from OpenGL.GLU import *
 
 
 #Fields & Data
-Display_Size = (1024,768)
+Display_Size = (1920,1080)
 
 clock = pygame.time.Clock()
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
 
     #Setting Up shaders
-    shader = Shader("Mandelbulb")
+    shader = Shader("Sierpinski Tetrahedron")
     program = shader.DecodeShaders()
     glUseProgram(program)
     
