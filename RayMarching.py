@@ -57,6 +57,7 @@ def RotateY(theta):
                 [-sine,0,cosine]], dtype = np.float32
                     )
     return MatrixF
+
     
 #Normalize a given vector
 def normalize(lst):
@@ -88,7 +89,7 @@ if __name__ == "__main__":
 
 
     #Setting Up shaders
-    shader = Shader("Sierpinski Tetrahedron")
+    shader = Shader("Soft Shadow")
     program = shader.DecodeShaders()
     glUseProgram(program)
     
@@ -119,7 +120,7 @@ if __name__ == "__main__":
                     sys.exit(0)
             if event.type == pygame.MOUSEMOTION:
                 mouseMove = [event.pos[i] - displayCenter[i] for i in range(2)]
-            pygame.mouse.set_pos(displayCenter)    
+            pygame.mouse.set_pos(displayCenter) 
 
         
         
